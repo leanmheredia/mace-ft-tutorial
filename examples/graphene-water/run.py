@@ -16,10 +16,21 @@ from ase.md.langevin import Langevin
 from ase.optimize import LBFGS
 from mace.calculators import MACECalculator
 
+# local settings from the repository .env (see .env.example)
+try:
+    from dotenv import load_dotenv, find_dotenv
+    load_dotenv(find_dotenv())
+except ImportError:
+    pass
+
+device = os.environ.get("MACE_DEVICE", "cuda")
+ft_model = os.environ.get("GRAPHENE_FT_MODEL", "mace-ft-tutorial-main-3.model")
+ref_model = os.environ.get("GRAPHENE_REF_MODEL", "mace-ft-tutorial-main-3.model")
+
 # two MACE models
 mace_models = {
-    "mace-ft": MACECalculator(model_paths="mace-ft-tutorial-main-3.model", enable_cueq=True, device="cuda"),
-    "mace-mp-0b3": MACECalculator(model_paths="mace-ft-tutorial-main-3.model", enable_cueq=False, device="cuda")
+    "mace-ft": MACECalculator(model_paths=ft_model, enable_cueq=True, device=device),
+    "mace-mp-0b3": MACECalculator(model_paths=ref_model, enable_cueq=False, device=device)
 }
 
 # three configurations

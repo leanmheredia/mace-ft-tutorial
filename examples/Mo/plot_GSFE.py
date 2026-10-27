@@ -51,6 +51,7 @@ def main():
     parser.add_argument('--use_ucf', default=False, action="store_true", help='Path to MACE model')
     parser.add_argument('--output_path', type=str, required=True, help='Output path for the GFSE figure')
     parser.add_argument('--surface_type', type=str, required=True, help='Output path for the GFSE figure')
+    parser.add_argument('--device', type=str, default='cuda:0', help='Torch device for the MACE calculator')
     
     args = parser.parse_args()
     
@@ -69,7 +70,7 @@ def main():
     
     gsf_structures = get_gsf_structures(super_cell, b)
     
-    mace_calc = MACECalculator(model_paths=[args.model_path], device='cuda:0', default_dtype="float64")
+    mace_calc = MACECalculator(model_paths=[args.model_path], device=args.device, default_dtype="float64")
     
     energies = []
     for atoms in gsf_structures:
